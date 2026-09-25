@@ -1,0 +1,87 @@
+### Get all exercises
+GET http://localhost:8080/exercises
+
+### Create an exercise
+POST http://localhost:8080/exercises
+Content-Type: application/json
+
+{
+  "name": "Barbell Squat",
+  "muscleGroup": "Legs",
+  "equipment": "Barbell",
+  "sets": 4,
+  "reps": 8,
+  "difficulty": "Intermediate",
+  "description": "Compound lower body exercise targeting quads, glutes, and hamstrings"
+}
+
+### Get all workout logs
+GET http://localhost:8080/workout-logs
+
+### Create a workout log
+POST http://localhost:8080/workout-logs
+Content-Type: application/json
+
+{
+  "exerciseId": "6ab54a926f74f0dc56e846f0",
+  "date": "2026-09-24",
+  "setsCompleted": 4,
+  "repsCompleted": 8,
+  "weight": 185,
+  "notes": "Felt strong today"
+}
+
+### Delete extra logs (cleanup)
+DELETE http://localhost:8080/workout-logs/6ab549942d028b96335dcd02
+
+### 
+DELETE http://localhost:8080/workout-logs/6ab549cd2d028b96335dcd04
+
+### 
+DELETE http://localhost:8080/workout-logs/6ab54a122d028b96335dcd05
+
+### 
+DELETE http://localhost:8080/workout-logs/6ab54e1a6f74f0dc56e846f1
+
+### Delete duplicate exercise
+DELETE http://localhost:8080/exercises/6ab549a92d028b96335dcd03
+
+### Fix the workout log's exerciseId
+PUT http://localhost:8080/workout-logs/6ab54a926f74f0dc56e846f0
+Content-Type: application/json
+
+{
+  "exerciseId": "6ab547862d028b96335dcd01",
+  "date": "2026-09-24",
+  "setsCompleted": 4,
+  "repsCompleted": 8,
+  "weight": 185,
+  "notes": "Felt strong today"
+}
+
+### Add second exercise
+POST http://localhost:8080/exercises
+Content-Type: application/json
+
+{
+  "name": "Bench Press",
+  "muscleGroup": "Chest",
+  "equipment": "Barbell",
+  "sets": 4,
+  "reps": 10,
+  "difficulty": "Intermediate",
+  "description": "Compound upper body exercise targeting chest, shoulders, and triceps"
+}
+
+### Add second workout log
+POST http://localhost:8080/workout-logs
+Content-Type: application/json
+
+{
+  "exerciseId": "6ab5be3a622a23dfa95654dc",
+  "date": "2026-09-23",
+  "setsCompleted": 4,
+  "repsCompleted": 10,
+  "weight": 135,
+  "notes": "New personal record"
+}
