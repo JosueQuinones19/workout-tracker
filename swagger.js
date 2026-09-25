@@ -5,8 +5,8 @@ const doc = {
     title: 'Workout Tracker API',
     description: 'API documentation for the Workout Tracker project'
   },
-  host: 'localhost:8080',
-  schemes: ['http']
+  host: 'workout-tracker-tnwm.onrender.com',
+  schemes: ['https']
 };
 
 const outputFile = './swagger.json';

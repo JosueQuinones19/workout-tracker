@@ -5,10 +5,10 @@
     "description": "API documentation for the Workout Tracker project",
     "version": "1.0.0"
   },
-  "host": "localhost:8080",
+  "host": "workout-tracker-tnwm.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/": {
