@@ -1,3 +1,5 @@
+const { ensureAuthenticated } = require('../middleware/auth');
+
 const express = require('express');
 const router = express.Router();
 const { ObjectId } = require('mongodb');
@@ -26,7 +28,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', ensureAuthenticated, async (req, res) => {
   try {
     const { name, muscleGroup, equipment, sets, reps, difficulty, description } = req.body;
 
@@ -69,7 +71,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', ensureAuthenticated, async (req, res) => {
   try {
     const db = await connectDB();
     const result = await db.collection('exercises').deleteOne({ _id: new ObjectId(req.params.id) });
