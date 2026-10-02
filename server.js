@@ -14,6 +14,7 @@ const authRoutes = require('./routes/auth');
 require('./config/passport')(passport);
 
 const app = express();
+app.set('trust proxy', 1);
 const port = process.env.PORT || 8080;
 
 app.use(express.json());
