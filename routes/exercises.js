@@ -32,8 +32,17 @@ router.post('/', ensureAuthenticated, async (req, res) => {
   try {
     const { name, muscleGroup, equipment, sets, reps, difficulty, description } = req.body;
 
-    if (!name || !muscleGroup || !equipment || !sets || !reps || !difficulty || !description) {
-      return res.status(400).json({ error: 'All fields are required' });
+    const errors = [];
+    if (!name || typeof name !== 'string') errors.push('name must be a non-empty string');
+    if (!muscleGroup || typeof muscleGroup !== 'string') errors.push('muscleGroup must be a non-empty string');
+    if (!equipment || typeof equipment !== 'string') errors.push('equipment must be a non-empty string');
+    if (!sets || typeof sets !== 'number' || sets < 1) errors.push('sets must be a number greater than 0');
+    if (!reps || typeof reps !== 'number' || reps < 1) errors.push('reps must be a number greater than 0');
+    if (!difficulty || typeof difficulty !== 'string' || !['Beginner', 'Intermediate', 'Advanced'].includes(difficulty)) errors.push('difficulty must be Beginner, Intermediate, or Advanced');
+    if (!description || typeof description !== 'string') errors.push('description must be a non-empty string');
+
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
     }
 
     const db = await connectDB();
@@ -47,12 +56,21 @@ router.post('/', ensureAuthenticated, async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', ensureAuthenticated, async (req, res) => {
   try {
     const { name, muscleGroup, equipment, sets, reps, difficulty, description } = req.body;
 
-    if (!name || !muscleGroup || !equipment || !sets || !reps || !difficulty || !description) {
-      return res.status(400).json({ error: 'All fields are required' });
+    const errors = [];
+    if (!name || typeof name !== 'string') errors.push('name must be a non-empty string');
+    if (!muscleGroup || typeof muscleGroup !== 'string') errors.push('muscleGroup must be a non-empty string');
+    if (!equipment || typeof equipment !== 'string') errors.push('equipment must be a non-empty string');
+    if (!sets || typeof sets !== 'number' || sets < 1) errors.push('sets must be a number greater than 0');
+    if (!reps || typeof reps !== 'number' || reps < 1) errors.push('reps must be a number greater than 0');
+    if (!difficulty || typeof difficulty !== 'string' || !['Beginner', 'Intermediate', 'Advanced'].includes(difficulty)) errors.push('difficulty must be Beginner, Intermediate, or Advanced');
+    if (!description || typeof description !== 'string') errors.push('description must be a non-empty string');
+
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
     }
 
     const db = await connectDB();

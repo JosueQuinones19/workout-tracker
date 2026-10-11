@@ -2,8 +2,8 @@
   "swagger": "2.0",
   "info": {
     "title": "PowerLog: Fitness Tracking API",
-    "description": "API for tracking exercises and workout logs. Part of the PowerLog fitness tracking platform. POST and DELETE routes for exercises require Google OAuth login.",
-    "version": "1.0.0"
+    "description": "API for tracking exercises, workout logs, workout plans, and fitness goals. Part of the PowerLog fitness tracking platform. POST, PUT, and DELETE routes require Google OAuth login.",
+    "version": "2.0.0"
   },
   "host": "workout-tracker-tnwm.onrender.com",
   "basePath": "/",
@@ -20,6 +20,14 @@
       "description": "CRUD operations for workout logs"
     },
     {
+      "name": "Workout Plans",
+      "description": "CRUD operations for workout plans"
+    },
+    {
+      "name": "Goals",
+      "description": "CRUD operations for fitness goals"
+    },
+    {
       "name": "Auth",
       "description": "Google OAuth authentication"
     }
@@ -31,12 +39,8 @@
         "summary": "Get all exercises",
         "description": "Returns a list of all exercises in the database.",
         "responses": {
-          "200": {
-            "description": "A list of exercises"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "A list of exercises" },
+          "500": { "description": "Internal Server Error" }
         }
       },
       "post": {
@@ -52,51 +56,22 @@
               "type": "object",
               "required": ["name", "muscleGroup", "equipment", "sets", "reps", "difficulty", "description"],
               "properties": {
-                "name": {
-                  "type": "string",
-                  "example": "Bench Press"
-                },
-                "muscleGroup": {
-                  "type": "string",
-                  "example": "Chest"
-                },
-                "equipment": {
-                  "type": "string",
-                  "example": "Barbell"
-                },
-                "sets": {
-                  "type": "integer",
-                  "example": 4
-                },
-                "reps": {
-                  "type": "integer",
-                  "example": 10
-                },
-                "difficulty": {
-                  "type": "string",
-                  "example": "Intermediate"
-                },
-                "description": {
-                  "type": "string",
-                  "example": "Flat barbell bench press targeting chest, shoulders, and triceps"
-                }
+                "name": { "type": "string", "example": "Bench Press" },
+                "muscleGroup": { "type": "string", "example": "Chest" },
+                "equipment": { "type": "string", "example": "Barbell" },
+                "sets": { "type": "integer", "example": 4 },
+                "reps": { "type": "integer", "example": 10 },
+                "difficulty": { "type": "string", "example": "Intermediate" },
+                "description": { "type": "string", "example": "Flat barbell bench press targeting chest, shoulders, and triceps" }
               }
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Exercise created successfully"
-          },
-          "400": {
-            "description": "Bad Request - missing required fields"
-          },
-          "401": {
-            "description": "Unauthorized - login required"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "201": { "description": "Exercise created successfully" },
+          "400": { "description": "Bad Request - validation errors" },
+          "401": { "description": "Unauthorized - login required" },
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
@@ -106,38 +81,20 @@
         "summary": "Get an exercise by ID",
         "description": "Returns a single exercise by its MongoDB ObjectId.",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "The exercise ID"
-          }
+          { "name": "id", "in": "path", "required": true, "type": "string", "description": "The exercise ID" }
         ],
         "responses": {
-          "200": {
-            "description": "The exercise object"
-          },
-          "400": {
-            "description": "Bad Request - invalid ID format"
-          },
-          "404": {
-            "description": "Exercise not found"
-          }
+          "200": { "description": "The exercise object" },
+          "400": { "description": "Bad Request - invalid ID format" },
+          "404": { "description": "Exercise not found" }
         }
       },
       "put": {
         "tags": ["Exercises"],
         "summary": "Update an exercise",
-        "description": "Updates all fields of an existing exercise by its ID.",
+        "description": "Updates all fields of an existing exercise by its ID. Requires Google OAuth login.",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "The exercise ID"
-          },
+          { "name": "id", "in": "path", "required": true, "type": "string", "description": "The exercise ID" },
           {
             "name": "body",
             "in": "body",
@@ -146,48 +103,22 @@
               "type": "object",
               "required": ["name", "muscleGroup", "equipment", "sets", "reps", "difficulty", "description"],
               "properties": {
-                "name": {
-                  "type": "string",
-                  "example": "Incline Bench Press"
-                },
-                "muscleGroup": {
-                  "type": "string",
-                  "example": "Upper Chest"
-                },
-                "equipment": {
-                  "type": "string",
-                  "example": "Barbell"
-                },
-                "sets": {
-                  "type": "integer",
-                  "example": 3
-                },
-                "reps": {
-                  "type": "integer",
-                  "example": 12
-                },
-                "difficulty": {
-                  "type": "string",
-                  "example": "Intermediate"
-                },
-                "description": {
-                  "type": "string",
-                  "example": "Incline barbell press targeting upper chest and front delts"
-                }
+                "name": { "type": "string", "example": "Incline Bench Press" },
+                "muscleGroup": { "type": "string", "example": "Upper Chest" },
+                "equipment": { "type": "string", "example": "Barbell" },
+                "sets": { "type": "integer", "example": 3 },
+                "reps": { "type": "integer", "example": 12 },
+                "difficulty": { "type": "string", "example": "Intermediate" },
+                "description": { "type": "string", "example": "Incline barbell press targeting upper chest and front delts" }
               }
             }
           }
         ],
         "responses": {
-          "204": {
-            "description": "Exercise updated successfully"
-          },
-          "400": {
-            "description": "Bad Request - missing fields or invalid ID"
-          },
-          "404": {
-            "description": "Exercise not found"
-          }
+          "204": { "description": "Exercise updated successfully" },
+          "400": { "description": "Bad Request - validation errors or invalid ID" },
+          "401": { "description": "Unauthorized - login required" },
+          "404": { "description": "Exercise not found" }
         }
       },
       "delete": {
@@ -195,27 +126,13 @@
         "summary": "Delete an exercise",
         "description": "Deletes an exercise by its ID. Requires Google OAuth login.",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "The exercise ID"
-          }
+          { "name": "id", "in": "path", "required": true, "type": "string", "description": "The exercise ID" }
         ],
         "responses": {
-          "204": {
-            "description": "Exercise deleted successfully"
-          },
-          "400": {
-            "description": "Bad Request - invalid ID format"
-          },
-          "401": {
-            "description": "Unauthorized - login required"
-          },
-          "404": {
-            "description": "Exercise not found"
-          }
+          "204": { "description": "Exercise deleted successfully" },
+          "400": { "description": "Bad Request - invalid ID format" },
+          "401": { "description": "Unauthorized - login required" },
+          "404": { "description": "Exercise not found" }
         }
       }
     },
@@ -225,18 +142,14 @@
         "summary": "Get all workout logs",
         "description": "Returns a list of all workout logs in the database.",
         "responses": {
-          "200": {
-            "description": "A list of workout logs"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "200": { "description": "A list of workout logs" },
+          "500": { "description": "Internal Server Error" }
         }
       },
       "post": {
         "tags": ["Workout Logs"],
         "summary": "Create a new workout log",
-        "description": "Creates a new workout log entry.",
+        "description": "Creates a new workout log entry. Requires Google OAuth login.",
         "parameters": [
           {
             "name": "body",
@@ -246,44 +159,21 @@
               "type": "object",
               "required": ["exerciseId", "date", "setsCompleted", "repsCompleted", "weight"],
               "properties": {
-                "exerciseId": {
-                  "type": "string",
-                  "example": "64abc123def4567890ghij12"
-                },
-                "date": {
-                  "type": "string",
-                  "example": "2026-10-08"
-                },
-                "setsCompleted": {
-                  "type": "integer",
-                  "example": 4
-                },
-                "repsCompleted": {
-                  "type": "integer",
-                  "example": 10
-                },
-                "weight": {
-                  "type": "number",
-                  "example": 135
-                },
-                "notes": {
-                  "type": "string",
-                  "example": "Felt strong, increased weight by 5 lbs"
-                }
+                "exerciseId": { "type": "string", "example": "64abc123def4567890ghij12" },
+                "date": { "type": "string", "example": "2026-10-08" },
+                "setsCompleted": { "type": "integer", "example": 4 },
+                "repsCompleted": { "type": "integer", "example": 10 },
+                "weight": { "type": "number", "example": 135 },
+                "notes": { "type": "string", "example": "Felt strong, increased weight by 5 lbs" }
               }
             }
           }
         ],
         "responses": {
-          "201": {
-            "description": "Workout log created successfully"
-          },
-          "400": {
-            "description": "Bad Request - missing required fields"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
+          "201": { "description": "Workout log created successfully" },
+          "400": { "description": "Bad Request - validation errors" },
+          "401": { "description": "Unauthorized - login required" },
+          "500": { "description": "Internal Server Error" }
         }
       }
     },
@@ -293,38 +183,20 @@
         "summary": "Get a workout log by ID",
         "description": "Returns a single workout log by its MongoDB ObjectId.",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "The workout log ID"
-          }
+          { "name": "id", "in": "path", "required": true, "type": "string", "description": "The workout log ID" }
         ],
         "responses": {
-          "200": {
-            "description": "The workout log object"
-          },
-          "400": {
-            "description": "Bad Request - invalid ID format"
-          },
-          "404": {
-            "description": "Workout log not found"
-          }
+          "200": { "description": "The workout log object" },
+          "400": { "description": "Bad Request - invalid ID format" },
+          "404": { "description": "Workout log not found" }
         }
       },
       "put": {
         "tags": ["Workout Logs"],
         "summary": "Update a workout log",
-        "description": "Updates all fields of an existing workout log by its ID.",
+        "description": "Updates all fields of an existing workout log by its ID. Requires Google OAuth login.",
         "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "The workout log ID"
-          },
+          { "name": "id", "in": "path", "required": true, "type": "string", "description": "The workout log ID" },
           {
             "name": "body",
             "in": "body",
@@ -333,69 +205,247 @@
               "type": "object",
               "required": ["exerciseId", "date", "setsCompleted", "repsCompleted", "weight"],
               "properties": {
-                "exerciseId": {
-                  "type": "string",
-                  "example": "64abc123def4567890ghij12"
-                },
-                "date": {
-                  "type": "string",
-                  "example": "2026-10-09"
-                },
-                "setsCompleted": {
-                  "type": "integer",
-                  "example": 3
-                },
-                "repsCompleted": {
-                  "type": "integer",
-                  "example": 8
-                },
-                "weight": {
-                  "type": "number",
-                  "example": 140
-                },
-                "notes": {
-                  "type": "string",
-                  "example": "Reduced reps, heavier weight"
-                }
+                "exerciseId": { "type": "string", "example": "64abc123def4567890ghij12" },
+                "date": { "type": "string", "example": "2026-10-09" },
+                "setsCompleted": { "type": "integer", "example": 3 },
+                "repsCompleted": { "type": "integer", "example": 8 },
+                "weight": { "type": "number", "example": 140 },
+                "notes": { "type": "string", "example": "Reduced reps, heavier weight" }
               }
             }
           }
         ],
         "responses": {
-          "204": {
-            "description": "Workout log updated successfully"
-          },
-          "400": {
-            "description": "Bad Request - missing fields or invalid ID"
-          },
-          "404": {
-            "description": "Workout log not found"
-          }
+          "204": { "description": "Workout log updated successfully" },
+          "400": { "description": "Bad Request - validation errors or invalid ID" },
+          "401": { "description": "Unauthorized - login required" },
+          "404": { "description": "Workout log not found" }
         }
       },
       "delete": {
         "tags": ["Workout Logs"],
         "summary": "Delete a workout log",
-        "description": "Deletes a workout log by its ID.",
+        "description": "Deletes a workout log by its ID. Requires Google OAuth login.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string", "description": "The workout log ID" }
+        ],
+        "responses": {
+          "204": { "description": "Workout log deleted successfully" },
+          "400": { "description": "Bad Request - invalid ID format" },
+          "401": { "description": "Unauthorized - login required" },
+          "404": { "description": "Workout log not found" }
+        }
+      }
+    },
+    "/workout-plans/": {
+      "get": {
+        "tags": ["Workout Plans"],
+        "summary": "Get all workout plans",
+        "description": "Returns a list of all workout plans in the database.",
+        "responses": {
+          "200": { "description": "A list of workout plans" },
+          "500": { "description": "Internal Server Error" }
+        }
+      },
+      "post": {
+        "tags": ["Workout Plans"],
+        "summary": "Create a new workout plan",
+        "description": "Creates a new workout plan. Requires Google OAuth login.",
         "parameters": [
           {
-            "name": "id",
-            "in": "path",
+            "name": "body",
+            "in": "body",
             "required": true,
-            "type": "string",
-            "description": "The workout log ID"
+            "schema": {
+              "type": "object",
+              "required": ["name", "description", "daysPerWeek", "exercises", "difficulty", "durationWeeks"],
+              "properties": {
+                "name": { "type": "string", "example": "Push Pull Legs" },
+                "description": { "type": "string", "example": "Classic PPL split for intermediate lifters" },
+                "daysPerWeek": { "type": "integer", "example": 6 },
+                "exercises": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "example": ["Bench Press", "Overhead Press", "Tricep Dips"]
+                },
+                "difficulty": { "type": "string", "example": "Intermediate" },
+                "durationWeeks": { "type": "integer", "example": 12 }
+              }
+            }
           }
         ],
         "responses": {
-          "204": {
-            "description": "Workout log deleted successfully"
-          },
-          "400": {
-            "description": "Bad Request - invalid ID format"
-          },
-          "404": {
-            "description": "Workout log not found"
+          "201": { "description": "Workout plan created successfully" },
+          "400": { "description": "Bad Request - validation errors" },
+          "401": { "description": "Unauthorized - login required" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/workout-plans/{id}": {
+      "get": {
+        "tags": ["Workout Plans"],
+        "summary": "Get a workout plan by ID",
+        "description": "Returns a single workout plan by its MongoDB ObjectId.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string", "description": "The workout plan ID" }
+        ],
+        "responses": {
+          "200": { "description": "The workout plan object" },
+          "400": { "description": "Bad Request - invalid ID format" },
+          "404": { "description": "Workout plan not found" }
+        }
+      },
+      "put": {
+        "tags": ["Workout Plans"],
+        "summary": "Update a workout plan",
+        "description": "Updates all fields of an existing workout plan by its ID. Requires Google OAuth login.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string", "description": "The workout plan ID" },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["name", "description", "daysPerWeek", "exercises", "difficulty", "durationWeeks"],
+              "properties": {
+                "name": { "type": "string", "example": "Upper Lower Split" },
+                "description": { "type": "string", "example": "4-day upper/lower split for strength" },
+                "daysPerWeek": { "type": "integer", "example": 4 },
+                "exercises": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "example": ["Squats", "Deadlifts", "Bench Press"]
+                },
+                "difficulty": { "type": "string", "example": "Advanced" },
+                "durationWeeks": { "type": "integer", "example": 8 }
+              }
+            }
           }
+        ],
+        "responses": {
+          "204": { "description": "Workout plan updated successfully" },
+          "400": { "description": "Bad Request - validation errors or invalid ID" },
+          "401": { "description": "Unauthorized - login required" },
+          "404": { "description": "Workout plan not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Workout Plans"],
+        "summary": "Delete a workout plan",
+        "description": "Deletes a workout plan by its ID. Requires Google OAuth login.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string", "description": "The workout plan ID" }
+        ],
+        "responses": {
+          "204": { "description": "Workout plan deleted successfully" },
+          "400": { "description": "Bad Request - invalid ID format" },
+          "401": { "description": "Unauthorized - login required" },
+          "404": { "description": "Workout plan not found" }
+        }
+      }
+    },
+    "/goals/": {
+      "get": {
+        "tags": ["Goals"],
+        "summary": "Get all goals",
+        "description": "Returns a list of all fitness goals in the database.",
+        "responses": {
+          "200": { "description": "A list of goals" },
+          "500": { "description": "Internal Server Error" }
+        }
+      },
+      "post": {
+        "tags": ["Goals"],
+        "summary": "Create a new goal",
+        "description": "Creates a new fitness goal. Requires Google OAuth login.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["title", "description", "targetDate", "category", "targetValue", "currentValue", "unit"],
+              "properties": {
+                "title": { "type": "string", "example": "Bench Press 225 lbs" },
+                "description": { "type": "string", "example": "Reach a 225 lb bench press for 1 rep" },
+                "targetDate": { "type": "string", "example": "2027-03-01" },
+                "category": { "type": "string", "example": "Strength" },
+                "targetValue": { "type": "number", "example": 225 },
+                "currentValue": { "type": "number", "example": 185 },
+                "unit": { "type": "string", "example": "lbs" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": { "description": "Goal created successfully" },
+          "400": { "description": "Bad Request - validation errors" },
+          "401": { "description": "Unauthorized - login required" },
+          "500": { "description": "Internal Server Error" }
+        }
+      }
+    },
+    "/goals/{id}": {
+      "get": {
+        "tags": ["Goals"],
+        "summary": "Get a goal by ID",
+        "description": "Returns a single fitness goal by its MongoDB ObjectId.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string", "description": "The goal ID" }
+        ],
+        "responses": {
+          "200": { "description": "The goal object" },
+          "400": { "description": "Bad Request - invalid ID format" },
+          "404": { "description": "Goal not found" }
+        }
+      },
+      "put": {
+        "tags": ["Goals"],
+        "summary": "Update a goal",
+        "description": "Updates all fields of an existing goal by its ID. Requires Google OAuth login.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string", "description": "The goal ID" },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["title", "description", "targetDate", "category", "targetValue", "currentValue", "unit"],
+              "properties": {
+                "title": { "type": "string", "example": "Bench Press 250 lbs" },
+                "description": { "type": "string", "example": "Reach a 250 lb bench press for 1 rep" },
+                "targetDate": { "type": "string", "example": "2027-06-01" },
+                "category": { "type": "string", "example": "Strength" },
+                "targetValue": { "type": "number", "example": 250 },
+                "currentValue": { "type": "number", "example": 225 },
+                "unit": { "type": "string", "example": "lbs" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "204": { "description": "Goal updated successfully" },
+          "400": { "description": "Bad Request - validation errors or invalid ID" },
+          "401": { "description": "Unauthorized - login required" },
+          "404": { "description": "Goal not found" }
+        }
+      },
+      "delete": {
+        "tags": ["Goals"],
+        "summary": "Delete a goal",
+        "description": "Deletes a goal by its ID. Requires Google OAuth login.",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "type": "string", "description": "The goal ID" }
+        ],
+        "responses": {
+          "204": { "description": "Goal deleted successfully" },
+          "400": { "description": "Bad Request - invalid ID format" },
+          "401": { "description": "Unauthorized - login required" },
+          "404": { "description": "Goal not found" }
         }
       }
     },
@@ -405,9 +455,7 @@
         "summary": "Login with Google",
         "description": "Redirects to Google OAuth login page.",
         "responses": {
-          "302": {
-            "description": "Redirect to Google login"
-          }
+          "302": { "description": "Redirect to Google login" }
         }
       }
     },
@@ -417,9 +465,7 @@
         "summary": "Google OAuth callback",
         "description": "Handles the Google OAuth callback after login.",
         "responses": {
-          "302": {
-            "description": "Redirect to profile on success, home on failure"
-          }
+          "302": { "description": "Redirect to profile on success, home on failure" }
         }
       }
     },
@@ -429,9 +475,7 @@
         "summary": "Logout",
         "description": "Logs out the current user and redirects to home.",
         "responses": {
-          "302": {
-            "description": "Redirect to home page"
-          }
+          "302": { "description": "Redirect to home page" }
         }
       }
     }

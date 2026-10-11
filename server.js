@@ -9,6 +9,8 @@ const swaggerDocument = require('./swagger.json');
 const connectDB = require('./db');
 const exercisesRoutes = require('./routes/exercises');
 const workoutLogsRoutes = require('./routes/workoutLogs');
+const workoutPlansRoutes = require('./routes/workoutPlans');
+const goalsRoutes = require('./routes/goals');
 const authRoutes = require('./routes/auth');
 
 require('./config/passport')(passport);
@@ -46,6 +48,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/auth', authRoutes);
 app.use('/exercises', exercisesRoutes);
 app.use('/workout-logs', workoutLogsRoutes);
+app.use('/workout-plans', workoutPlansRoutes);
+app.use('/goals', goalsRoutes);
 
 async function start() {
   await connectDB();
@@ -54,4 +58,8 @@ async function start() {
   });
 }
 
-start();
+if (require.main === module) {
+  start();
+}
+
+module.exports = app;

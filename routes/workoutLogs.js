@@ -1,3 +1,5 @@
+const { ensureAuthenticated } = require('../middleware/auth');
+
 const express = require('express');
 const router = express.Router();
 const { ObjectId } = require('mongodb');
@@ -26,12 +28,19 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', ensureAuthenticated, async (req, res) => {
   try {
     const { exerciseId, date, setsCompleted, repsCompleted, weight, notes } = req.body;
 
-    if (!exerciseId || !date || !setsCompleted || !repsCompleted || !weight) {
-      return res.status(400).json({ error: 'exerciseId, date, setsCompleted, repsCompleted, and weight are required' });
+    const errors = [];
+    if (!exerciseId || typeof exerciseId !== 'string') errors.push('exerciseId must be a non-empty string');
+    if (!date || typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) errors.push('date must be a string in YYYY-MM-DD format');
+    if (!setsCompleted || typeof setsCompleted !== 'number' || setsCompleted < 1) errors.push('setsCompleted must be a number greater than 0');
+    if (!repsCompleted || typeof repsCompleted !== 'number' || repsCompleted < 1) errors.push('repsCompleted must be a number greater than 0');
+    if (!weight || typeof weight !== 'number' || weight <= 0) errors.push('weight must be a number greater than 0');
+
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
     }
 
     const db = await connectDB();
@@ -45,12 +54,19 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', async (req, res) => {
+router.put('/:id', ensureAuthenticated, async (req, res) => {
   try {
     const { exerciseId, date, setsCompleted, repsCompleted, weight, notes } = req.body;
 
-    if (!exerciseId || !date || !setsCompleted || !repsCompleted || !weight) {
-      return res.status(400).json({ error: 'exerciseId, date, setsCompleted, repsCompleted, and weight are required' });
+    const errors = [];
+    if (!exerciseId || typeof exerciseId !== 'string') errors.push('exerciseId must be a non-empty string');
+    if (!date || typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) errors.push('date must be a string in YYYY-MM-DD format');
+    if (!setsCompleted || typeof setsCompleted !== 'number' || setsCompleted < 1) errors.push('setsCompleted must be a number greater than 0');
+    if (!repsCompleted || typeof repsCompleted !== 'number' || repsCompleted < 1) errors.push('repsCompleted must be a number greater than 0');
+    if (!weight || typeof weight !== 'number' || weight <= 0) errors.push('weight must be a number greater than 0');
+
+    if (errors.length > 0) {
+      return res.status(400).json({ errors });
     }
 
     const db = await connectDB();
@@ -69,7 +85,7 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', ensureAuthenticated, async (req, res) => {
   try {
     const db = await connectDB();
     const result = await db.collection('workoutLogs').deleteOne({ _id: new ObjectId(req.params.id) });
